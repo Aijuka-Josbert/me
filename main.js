@@ -231,30 +231,36 @@ sr.reveal(`.footer, footer__container`, {
   origin: "bottom",
   distance: "30px",
 });
-const form = document.querySelector("form"),
-statusTxt = form.querySelector(".button");
 
-form.onsubmit = (e) => {
-e.preventDefault(); // Prevent form from submitting
-statusTxt.style.display = "block";
-statusTxt.style.color = "red";
+//
+const form = document.querySelector('.contact__form');
+const statusTxt = document.querySelector('.status-txt');
 
-let xr = new XMLHttpRequest(); // Creating new XML object
-xr.open("POST", "./message.php", true); // Sending POST request to .php file
-xr.onload = () => { // Once AJAX loaded
-    if (xr.readyState == 4 && xr.status == 200) { // Check response status
-        let response = xr.response; // Store AJAX response
-        if (response.indexOf("email and password field is required") != -1 || response.indexOf("Enter a valid email address!") != -1) {
-            statusTxt.style.color = "red";
-        } else {
-            form.reset();
-            setTimeout(() => {
-                statusTxt.style.display = "none";
-            }, 3000); // Hide status text after 3 seconds
-        }
-        statusTxt.innerHTML = response; // Display response
-    }
-};
-let formData = new FormData(form); // Creating new form data object
-xr.send(formData); // Sending form data
-};
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  statusTxt.style.display = 'block';
+  statusTxt.style.color = 'red';
+
+  const formData = new FormData(form);
+
+  fetch('message.php', {
+    method: 'POST',
+    body: formData,
+  })
+    .then((response) => response.text())
+    .then((response) => {
+      if (response.indexOf('email and message field is required') !== -1 || response.indexOf('Enter a valid email address!') !== -1) {
+        statusTxt.style.color = 'red';
+      } else {
+        form.reset();
+        setTimeout(() => {
+          statusTxt.style.display = 'none';
+        }, 3000);
+      }
+      statusTxt.innerHTML = response;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+});
+
