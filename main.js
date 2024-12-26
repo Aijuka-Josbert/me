@@ -231,34 +231,30 @@ sr.reveal(`.footer, footer__container`, {
   origin: "bottom",
   distance: "30px",
 });
-
-// form det
 const form = document.querySelector("form"),
-statusTxt = form.querySelector("button .button");
+statusTxt = form.querySelector(".button");
 
-form.onsubmit = (e)=>{
-  e.preventDefault(); //prevent from submi
-  statusTxt.style.display ="block";
-  statusTxt.style.color = "red";
+form.onsubmit = (e) => {
+e.preventDefault(); // Prevent form from submitting
+statusTxt.style.display = "block";
+statusTxt.style.color = "red";
 
-  let xr = new XMLHttpRequest();//creating new xml object
-xr.open("POST","./message.php",true)//sending post mess to .php file
-xr.onload = ()=>{ //once ajax loaded
-  if(xr.readyState ==4 && xr.status ==200){//if aja response status is 200 & ready status is 4 means there is no any error
-    let response = xr.response; //storing ajax response in a response variable
-    if(response.indexOf("email and password field is required") != -1 || response.indexOf("Enter a valid email address!" )){
-      statusTxt.style.color = "red";
-    }else{
-      form.reset();
-      setTimeout(()=>{
-        statusTxt.style.display ="none";
-   
-      },3000);//hide the status textafter 3 sec
+let xr = new XMLHttpRequest(); // Creating new XML object
+xr.open("POST", "./message.php", true); // Sending POST request to .php file
+xr.onload = () => { // Once AJAX loaded
+    if (xr.readyState == 4 && xr.status == 200) { // Check response status
+        let response = xr.response; // Store AJAX response
+        if (response.indexOf("email and password field is required") != -1 || response.indexOf("Enter a valid email address!") != -1) {
+            statusTxt.style.color = "red";
+        } else {
+            form.reset();
+            setTimeout(() => {
+                statusTxt.style.display = "none";
+            }, 3000); // Hide status text after 3 seconds
+        }
+        statusTxt.innerHTML = response; // Display response
     }
-    // console.log(response); 
-    statusTxt.innerHTML = response;
-  }
-}
-let formData = new FormData(form);//creating new form data obj. used to send form data
-xr.send(formData);//sending form data
-}
+};
+let formData = new FormData(form); // Creating new form data object
+xr.send(formData); // Sending form data
+};
