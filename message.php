@@ -1,51 +1,44 @@
-<!-- <?php
-// $name = $_POST['name'];
-// $email = $_POST['email'];
-// $message = $_POST['message'];
-
-// if(!empty($email) && !empty($message)) { // Check if email and message are not empty
-//     if(filter_var($email, FILTER_VALIDATE_EMAIL)) { // Validate email
-//         $receiver = "josbertaijuka15@gmail.com";
-//         $subject = "Form: $name <$email>"; // Subject of email
-//         $body = "Name: $name\nEmail: $email\nMessage: $message"; // Email body
-//         $sender = "From: $email"; // Sender email
-//         if(mail($receiver, $subject, $body, $sender)) {
-//             echo "Your message has been sent.";
-//         } else {
-//             echo "Sorry, failed to send your message.";
-//         }
-//     } else {
-//         echo "Enter a valid email address!";
-//     }
-// } else {
-//     echo "Email and message fields are required.";
-// }
-?> -->
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'vendor/autoload.php'; // Include PHPMailer
+
 $name = $_POST['name'];
 $email = $_POST['email'];
 $message = $_POST['message'];
 
 if (!empty($email) && !empty($message)) {
-  if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    $receiver = 'your_email@example.com'; // Replace with your email address
-    $subject = 'Feedback from ' . $name;
+    if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $mail = new PHPMailer(true);
+        try {
+            // Server settings
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = 'josbertaijuka15@gmail.com'; // Your Gmail address
+            $mail->Password = '0759420168,';   // Your Gmail App Password
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = 587;
 
-    $body = 'Name: ' . $name . "\nEmail: " . $email . "\nMessage: " . $message;
+            // Recipients
+            $mail->setFrom($email, $name);
+            $mail->addAddress('josbertaijuka15@gmail.com', 'Josbert Aijuka');
 
-    $headers = 'From: ' . $email . "\r\n" .
-      'Reply-To: ' . $email . "\r\n" .
-      'X-Mailer: PHP/' . phpversion();
+            // Content
+            $mail->isHTML(true);
+            $mail->Subject = "Form: $name <$email>";
+            $mail->Body = nl2br("Name: $name\nEmail: $email\nMessage: $message");
 
-    if (mail($receiver, $subject, $body, $headers)) {
-      echo 'Your message has been sent!';
+            $mail->send();
+            echo "Your message has been sent.";
+        } catch (Exception $e) {
+            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        }
     } else {
-      echo 'Sorry, failed to send your message!';
+        echo "Enter a valid email address!";
     }
-  } else {
-    echo 'Enter a valid email address!';
-  }
 } else {
-  echo 'Email and message field is required!';
+    echo "Email and message field is required.";
 }
 ?>

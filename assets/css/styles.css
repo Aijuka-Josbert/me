@@ -771,7 +771,9 @@ body.light-theme {
   display: block;
   margin-bottom: 0.75rem;
 }
-
+.status-txt{
+  display: none;
+}
 .contact__button {
   color: var(--first-color);
   font-size: var(--small-font-size);

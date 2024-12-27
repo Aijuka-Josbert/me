@@ -233,34 +233,34 @@ sr.reveal(`.footer, footer__container`, {
 });
 
 //
-const form = document.querySelector('.contact__form');
-const statusTxt = document.querySelector('.status-txt');
+const form = document.querySelector(".contact__form"),
+    statusTxt = document.querySelector(".status-txt");
 
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
-  statusTxt.style.display = 'block';
-  statusTxt.style.color = 'red';
+form.onsubmit = (e) => {
+    e.preventDefault(); // Prevent default form submission
+    statusTxt.style.display = "block";
+    statusTxt.style.color = "red";
+    statusTxt.innerHTML = "Sending message...";
 
-  const formData = new FormData(form);
+    let xhr = new XMLHttpRequest(); // Create new XML object
+    xhr.open("POST", "./message.php", true); // Send POST to PHP file
+    xhr.onload = () => {
+        if (xhr.readyState == 4 && xhr.status == 200) { // If AJAX response status is 200
+            let response = xhr.response; // Store AJAX response
+            if (response.includes("email and message field is required") || response.includes("Enter a valid email address!")) {
+                statusTxt.style.color = "red";
+            } else {
+                form.reset();
+                statusTxt.style.color = "green";
+                setTimeout(() => {
+                    statusTxt.style.display = "none";
+                }, 3000); // Hide status text after 3 seconds
+            }
+            statusTxt.innerHTML = response; // Display the response
+        }
+    };
+    let formData = new FormData(form); // Create new form data object
+    xhr.send(formData); // Send form data
+};
 
-  fetch('message.php', {
-    method: 'POST',
-    body: formData,
-  })
-    .then((response) => response.text())
-    .then((response) => {
-      if (response.indexOf('email and message field is required') !== -1 || response.indexOf('Enter a valid email address!') !== -1) {
-        statusTxt.style.color = 'red';
-      } else {
-        form.reset();
-        setTimeout(() => {
-          statusTxt.style.display = 'none';
-        }, 3000);
-      }
-      statusTxt.innerHTML = response;
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-});
 
