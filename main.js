@@ -232,7 +232,7 @@ sr.reveal(`.footer, footer__container`, {
   distance: "30px",
 });
 
-//
+//form action and php message
 const form = document.querySelector(".contact__form"),
     statusTxt = document.querySelector(".status-txt");
 

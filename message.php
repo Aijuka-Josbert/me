@@ -1,3 +1,5 @@
+<!-- //Message could not be sent. Mailer Error: SMTP Error: Could not connect to SMTP host. Failed to connect to serverSMTP server error: 
+//Failed to connect to server Additional SMTP info: php_network_getaddresses: getaddrinfo for smtp.gmail.com failed: No such host is known. -->
 <?php
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -14,10 +16,10 @@ if (!empty($email) && !empty($message)) {
         try {
             // Server settings
             $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
+            $mail->Host = 'smtp.gmail.com';//
             $mail->SMTPAuth = true;
             $mail->Username = 'josbertaijuka15@gmail.com'; // Your Gmail address
-            $mail->Password = '0759420168,';   // Your Gmail App Password
+            $mail->Password = 'josbert001.';   // Your Gmail App Password
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
 
