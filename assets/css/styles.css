@@ -524,8 +524,10 @@ body.light-theme {
 
 /*=============== SERVICES ===============*/
 .services__container {
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
+  /* MOBILE FIRST: On small screens, cards stack in a single centered column */
+  grid-template-columns: 280px;
+  justify-content: center;
+  row-gap: 2rem; /* Adds space when cards are stacked vertically */
   padding-top: 1rem;
 }
 
@@ -533,6 +535,7 @@ body.light-theme {
   background-color: var(--container-color);
   padding: 3rem 1.5rem 1.5em;
   border-radius: 1.25rem;
+  text-align: center; /* Center the text inside the card */
 }
 
 .services__title {
