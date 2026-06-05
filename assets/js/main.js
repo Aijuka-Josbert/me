@@ -52,24 +52,24 @@ modalCloses.forEach((modalClose) => {
 
 
 /*=============== PORTFOLIO ITEM FILTER (MIXITUP) ===============*/
-let mixerPortfolio = mixitup('.work__container', {
-    selectors: {
-        target: '.work__card'
-    },
-    animation: {
-        duration: 300
+/*=============== PORTFOLIO ITEM FILTER (MIXITUP) ===============*/
+const workContainer = document.querySelector('.work__container');
+if (workContainer && typeof mixitup === 'function') {
+    let mixerPortfolio = mixitup('.work__container', {
+        selectors: { target: '.work__card' },
+        animation: { duration: 300 }
+    });
+
+    /* Link active work */
+    const linkWork = document.querySelectorAll('.work__item');
+
+    function activeWork() {
+        linkWork.forEach(l => l.classList.remove('active-work'));
+        this.classList.add('active-work');
     }
-});
 
-/* Link active work */
-const linkWork = document.querySelectorAll('.work__item');
-
-function activeWork() {
-    linkWork.forEach(l => l.classList.remove('active-work'));
-    this.classList.add('active-work');
+    linkWork.forEach(l => l.addEventListener('click', activeWork));
 }
-
-linkWork.forEach(l => l.addEventListener('click', activeWork));
 
 
 /*=============== SCROLL SECTIONS ACTIVE LINK ===============*/
@@ -83,10 +83,13 @@ function scrollActive() {
         const sectionTop = current.offsetTop - 50;
         let sectionId = current.getAttribute('id');
 
-        if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-            document.querySelector('.nav__menu a[href*=' + sectionId + ']').classList.add('active-link');
-        } else {
-            document.querySelector('.nav__menu a[href*=' + sectionId + ']').classList.remove('active-link');
+        const navLink = document.querySelector('.nav__menu a[href*=' + sectionId + ']');
+        if (navLink) {
+            if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+                navLink.classList.add('active-link');
+            } else {
+                navLink.classList.remove('active-link');
+            }
         }
     });
 }
@@ -135,3 +138,6 @@ const sr = ScrollReveal({
 sr.reveal(`.home__data`);
 sr.reveal(`.home__handle`, {delay: 700});
 sr.reveal(`.home__social, .home__scroll`, {delay: 900, origin: 'bottom'});
+// Contact section reveal
+sr.reveal(`.contact__card`, {interval: 120, origin: 'left', distance: '30px', delay: 300});
+sr.reveal(`.contact__form`, {origin: 'right', distance: '30px', delay: 400});
